@@ -138,4 +138,4 @@ the [seL4/sel4runtime] repository. This will depend on the outcomes of the RFC
 until that is approved and implemented.
 
 [seL4/sel4runtime]: https://github.com/seL4/sel4runtime
-[RFC-3]: https://github.com/seL4/rfcs/blob/main/src/implemented/0030-cross-platform-tls-support.md
+[RFC-3]: 0030-cross-platform-tls.md
