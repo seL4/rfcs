@@ -5,6 +5,13 @@
 
 # seL4 Request for Comments (RFC) Process
 
+[Approved RFCs](https://sel4.github.io/rfcs/) -
+[Open RFCs](https://github.com/seL4/rfcs/pulls?q=is%3Aopen+is%3Apr+-label%3Anot-rfc+) -
+[RFCs under implementation](https://github.com/seL4/rfcs/tree/main/src/active)
+
+To be notified of new RFCs, use the GitHub button on the top to watch pull
+requests on this repository.
+
 The seL4 foundation uses the request for comments (RFC) process to
 
 - allow the community to discuss design changes in seL4,
@@ -21,19 +28,20 @@ This helps the seL4 community ensure that such changes are made with the goal of
 the best outcome for the most users of seL4 without compromising seL4's
 high-assurance properties of functional correctness, isolation, and security.
 
-<!-- TODO: update for GitHub process:
-To see all current RFCs, go check out the [RFC dashboard][].
-
-You can also stay notified
-of new RFCs and updates to RFCs
-by joining the [RFC announcement mailing list][].
-You can then use you [Atlassian Cloud][] account
-to keep track of and contribute to discussion
-on each of the RFCs.
-
-[RFC dashboard]: https://sel4kernel.atlassian.net/secure/Dashboard.jspa?selectPageId=10103 "RFC dashboard"
-[RFC announcement mailing list]: https://lists.sel4.systems/postorius/lists/rfc.sel4.systems/ "RFC announcement mailing list"
--->
+- [When to follow the RFC process](#when-to-follow-the-rfc-process)
+- [When not to follow the RFC process](#when-not-to-follow-the-rfc-process)
+- [The RFC Process](#the-rfc-process)
+  - [Before creating a new RFC](#before-creating-a-new-rfc)
+  - [Proposing an new RFC](#proposing-an-new-rfc)
+  - [Getting an RFC approved](#getting-an-rfc-approved)
+  - [Postponement of an RFC](#postponement-of-an-rfc)
+  - [Stage 1 approval](#stage-1-approval)
+  - [Implementation of an approved RFC](#implementation-of-an-approved-rfc)
+  - [Deferment of an approved RFC](#deferment-of-an-approved-rfc)
+- [RFC states](#rfc-states)
+  - [Under discussion](#under-discussion)
+  - [Ready for implementation](#ready-for-implementation)
+  - [Closed](#closed)
 
 ## When to follow the RFC process
 
@@ -132,7 +140,7 @@ Every RFC should use the RFC [template], omitting sections that are not relevant
 for the RFC (most sections will be relevant, do not omit them lightly).
 
 [RFC repository]: https://github.com/seL4/rfcs "seL4 RFC repository"
-[postponed RFCs]: TODO
+[postponed RFCs]: https://github.com/seL4/rfcs/pulls?q=is%3Aclosed+is%3Apr+label%3Apostponed
 
 
 ### Getting an RFC approved
