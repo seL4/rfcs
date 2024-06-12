@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: MIT
+# Copyright Rust Language Community
+
+# Based on https://github.com/rust-lang/rfcs/
+
+[book]
+title = "The seL4 RFC Book"
+
+[output.html]
+smart-punctuation = true
+git-repository-url = "https://github.com/seL4/rfcs"
+site-url = "/rfcs/"
+
+[output.html.playground]
+runnable = false
