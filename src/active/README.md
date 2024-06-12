@@ -3,7 +3,7 @@
   Copyright 2024 seL4 Project a Series of LF Projects, LLC.
 -->
 
-# Implemented RFCs
+# Active RFCs
 
 Putting an RFC file here marks the RFC as _active_. Active RFCs are the ones
 that have been approved and are under implementation. They are moved here by the
