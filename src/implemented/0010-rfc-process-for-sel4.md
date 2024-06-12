@@ -10,10 +10,9 @@
 
 ## Summary
 
-> [!NOTE]
-> This is the RFC process as it was first proposed in 2018. The process has
-> changed in details over time, for instance it now runs on GitHub instead of
-> Jira.
+> Note that this is the RFC process as it was first proposed in 2018. The
+> process has changed in details over time, for instance it now runs on GitHub
+> instead of Jira.
 >
 > The current seL4 RFC process is described in the [seL4 RFC repository].
 
@@ -160,6 +159,5 @@ from the community, likely due to this being a new process.
 Some of the details of this system, such as it's use of Jira over alternatives
 may be revised at a later date. We won't really be sure until we start using it.
 
-> [!NOTE]
-> This is the original seL4 RFC process as proposed in 2018. Find the current
-> RFC process [here][seL4 RFC repository].
+> Note that this is the original seL4 RFC process as proposed in 2018. Find the
+> current RFC process [here][seL4 RFC repository].
