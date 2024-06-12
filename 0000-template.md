@@ -8,6 +8,9 @@
 
 # seL4 RFC Template
 
+- Author: [fill in]
+- Proposed: [YYYY-MM-DD fill in]
+
 ## Summary
 
 One paragraph explanation of the change.
