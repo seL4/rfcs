@@ -111,7 +111,7 @@ a decision of the [Technical Steering Committee][TSC] of the seL4 Foundation.
 [RFC discourse forum]: https://sel4.discourse.group/c/rfc-discussion/
 [community forums]: https://sel4.systems/contact/
 [TSC]: https://sel4.systems/Foundation/TSC/ "seL4 Technical Steering Committee"
-[template]: 000-template.md "RFC template"
+[template]: 0000-template.md "RFC template"
 
 
 ### Proposing an new RFC
