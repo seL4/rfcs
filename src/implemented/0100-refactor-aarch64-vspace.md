@@ -111,3 +111,7 @@ There are existing pull-requests that show-case the proposed changes.
 
 As always, verification progress can lead to design or implementation changes as
 bugs are found or verification blockers are encountered.
+
+## Disposition
+
+The TSC has voted to approve this RFC for implementation without changes.
