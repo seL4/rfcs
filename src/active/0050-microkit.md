@@ -10,13 +10,14 @@
 - Author: Ben Leslie
 - Proposed: 2020-11-19
 - Implementation repository: <https://github.com/seL4/microkit>
+- Current manual: <https://github.com/seL4/microkit/blob/main/docs/manual.md>
 
 ## Summary
 
-The seL4 Core Platform is an operating system (OS) personality for the seL4
+The seL4 Microkit is an operating system (OS) personality for the seL4
 microkernel.
 
-The purpose of seL4 Core Platform is to:
+The purpose of seL4 Microkit is to:
 
 - provide a small and simple OS for a wide range of IoT, cyber physical and
   other embedded use cases;
@@ -38,13 +39,13 @@ The seL4 software ecosystem currently provides various options for developing
 systems on seL4, however, such support is both overly broad (providing too many
 options) and simultaneously too limited for many developers.
 
-The seL4 Core Platform addresses this challenge by constraining the system
+The seL4 Microkit addresses this challenge by constraining the system
 architecture and to one that provides enough features and power for this usage
 class, enabling a much simpler set of developer-visible abstractions.
 
-The goals of the platform are to:
+The goals of the microkit are to:
 
-- provide well-defined hardware interfaces to ease porting of the Platform;
+- provide well-defined hardware interfaces to ease porting of the microkit;
 
 - support a high degree of code reuse between deployments;
 
@@ -63,22 +64,22 @@ The goals of the platform are to:
 
 ## Guide-level explanation
 
-The seL4 Platform consists of:
+The seL4 Microkit consists of:
 
-- an seL4 Platform specification, which defines the key platform abstractions
-  and platform API
+- an seL4 Microkit specification, which defines the key abstractions
+  and Microkit API
 
-- an seL4 Platform implementation, which provides implementations of the key
+- an seL4 Microkit implementation, which provides implementations of the key
   abstractions and API
 
 - definitions of key OS service interfaces and implementations of these
 
 ## Scope
 
-The initial focus and scope of this RFC is on defining the key seL4 Platform
+The initial focus and scope of this RFC is on defining the key seL4 Microkit
 abstractions, which build on seL4 abstractions.
 
-The seL4 Platform abstractions are:
+The seL4 Microkit abstractions are:
 
 - processor core (core)
 - protection domain (PD)
@@ -94,25 +95,25 @@ are available in
 
 ## Reference-level explanation
 
-While this RFC initially targets the main platform abstractions, ultimately the
-platform will provide an SDK (including interfaces, libraries, services, and
-tools) for building seL4 Platform based systems.
+While this RFC initially targets the main microkit abstractions, ultimately the
+microkit will provide an SDK (including interfaces, libraries, services, and
+tools) for building seL4 Microkit based systems.
 
-The platform implementation (and SDK) could be based on, and incorporate,
+The microkit implementation (and SDK) could be based on, and incorporate,
 existing technology such as CAmkES, capDL, seL4 runtime, seL4 driver framework,
 etc. however this has not been decided yet.
 
-The seL4 Platform will initially be limited to a small set of hardware
+The seL4 Microkit will initially be limited to a small set of hardware
 platforms. This is to ensure that effort is focussed on fully supporting the
-platform on this hardware.  Ports to other hardware can be contributed by
+microkit on this hardware.  Ports to other hardware can be contributed by
 others.
 
 ## Drawbacks
 
-The RFC currently only presents the seL4 Platform concepts.  These have not yet
+The RFC currently only presents the seL4 Microkit concepts.  These have not yet
 been implemented nor have they yet been used to build concrete systems.
 
-While the intention of the seL4 Platform is to focus seL4 ecosystem and
+While the intention of the seL4 Microkit is to focus seL4 ecosystem and
 developer effort on a single (well defined and supported) model, the danger is
 that it adds yet another set of tools and platforms/frameworks to the mix making
 it even less clear what developers should use.
@@ -121,9 +122,9 @@ it even less clear what developers should use.
 
 The intention is that experience from building seL4-based systems and developing
 and using previous existing platforms/frameworks/libraries/tools will lead to a
-more suitable and usable Platform definition that will supersede some of the
+more suitable and usable platform definition that will supersede some of the
 earlier platforms/frameworks/libraries/tools and that new (and existing)
-developers will migrate to the seL4 Platform.
+developers will migrate to the seL4 Microkit.
 
 ## Prior art
 
@@ -138,13 +139,13 @@ Prior (and similar) art includes:
 
 ## Unresolved questions
 
-This RFC addresses the first step towards defining the full seL4 Platform.
+This RFC addresses the first step towards defining the full seL4 Microkit.
 
 It does not provide a roadmap to the further steps.
 
 ## Disposition
 
-The TSC has approved this RFC in today's (12 Sep 2023) meeting and also approved
+The TSC has approved this RFC in its 12 Sep 2023 meeting and also approved
 a name change to the Microkit (or seL4 Microkit if context is needed).
 
 The design concerns from previous meetings have been addressed and
