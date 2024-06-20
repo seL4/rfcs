@@ -8,6 +8,35 @@
 
 # seL4 RFC Template
 
+<!--
+  To use this template:
+
+ - Fork this repository on GitHub
+ - Choose a number nnn0 greater than any of the nnnx files in
+       ls -l src/*/????-*.md
+
+ - Make a branch <nnn0>-<short-rfc-name>
+ - Copy this template into src/proposed/<nnn0>-<short-rfc-name>.md
+
+ - Replace the title above with the title of your RFC
+ - Choose CC-BY-SA-4.0 above for contributing the RFC (only the template should be MIT)
+ - Add your name/company to Copyright, removing the other ones (they apply to the template)
+
+ - Fill in author, at the end, before you submit, fill in proposal date
+ - Fill in the rest of the sections. It is Ok to leave out sections that do not
+   apply, but don't leave out sections lightly.
+
+ - Make a pull request to <https://github.com/seL4/rfcs> to publish the RFC and
+   start formal discussion.
+
+ - If you are not sure yet how to fill in all sections or want to discuss informally
+   before you start the process, you could post a link to your partially
+   filled in template on your fork to https://sel4.discourse.group/c/rfc-discussion/
+   or start a GitHub gist or other markdown drafting site with the template to
+   work on it incrementally without doing all the setup steps first. Then go
+   through the steps above when you are ready to submit the RFC.
+-->
+
 - Author: [fill in]
 - Proposed: [YYYY-MM-DD fill in]
 
