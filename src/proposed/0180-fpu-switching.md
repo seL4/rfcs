@@ -21,9 +21,10 @@ switching.
 
 ## Motivation
 
-Current FPU context switching in seL4 disables the FPU on kernel exit, waits for
-a thread to fault when it accesses the FPU, transparently handles the fault,
-saves/restores FPU context, and then returns to the thread.
+If the next thread is not the current FPU owner, current FPU context switching
+in seL4 disables the FPU on kernel exit, waits for a thread to fault when it
+accesses the FPU, transparently handles the fault, saves/restores FPU context,
+and then returns to the thread.
 
 The motivation for this scheme was that threads that never use the FPU do not pay
 for FPU context switching cost. However, it has the following problems:
@@ -40,9 +41,9 @@ for FPU context switching cost. However, it has the following problems:
   simply by using the FPU itself, since kernel FPU save/restore actions will
   only occur if another thread used the FPU.
 
-- performance of this scheme is not optimal -- taking a fault every time the FPU
-  is used adds unnecessary overhead, especially in systems where FPU usage is
-  high.
+- performance of this scheme is not optimal -- if multiple threads are using the
+  FPU in a row, the code will be taking a fault every time the FPU is used. This
+  adds unnecessary overhead, especially in systems where FPU usage is high.
 
 The proposed scheme fixes these problems and maintains the original intent that
 threads which do not use the FPU should not pay FPU context switching cost.
