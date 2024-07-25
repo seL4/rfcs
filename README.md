@@ -5,9 +5,9 @@
 
 # seL4 Request for Comments (RFC) Process
 
-[Approved RFCs](https://sel4.github.io/rfcs/) -
-[Open RFCs](https://github.com/seL4/rfcs/pulls?q=is%3Aopen+is%3Apr+-label%3Anot-rfc+) -
-[RFCs under implementation](https://github.com/seL4/rfcs/tree/main/src/active)
+> - [Approved RFCs](https://sel4.github.io/rfcs/)
+> - [Open RFCs](https://github.com/seL4/rfcs/pulls?q=is%3Aopen+is%3Apr+-label%3Anot-rfc+)
+> - [RFCs under implementation](https://github.com/seL4/rfcs/tree/main/src/active)
 
 To be notified of new RFCs, use the GitHub button on the top to watch pull
 requests on this repository.
