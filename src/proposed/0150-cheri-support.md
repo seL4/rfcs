@@ -3,15 +3,17 @@
   Copyright 2023 Hesham Almatary
 -->
 
-# Support CHERI/Morello in seL4
+# Support CHERI in seL4
 
 - Author: Hesham Almatary
 - Proposed: 2023-11-13
 
 ## Summary
 
-This RFC aims to discuss porting seL4 to Arm’s Morello (CHERI on
-AArch64/Armv8.2a). The goal of this project is to provide complete fine-grained
+This RFC aims to discuss adding support in seL4 to support running
+CHERI-enabled userspace on architectures that support CHERI such as
+Arm’s Morello (CHERI onAArch64/Armv8.2a), and CHERI-RISC-V standards.
+The goal of this project is to provide complete fine-grained
 spatial and referential (pointer) memory-safety for 1) new C-based seL4
 applications, 2) existing C-based seL4 libraries (e.g., sel4_libs,
 sel4_project_libs, util_libs, sel4test, sel4bench, muslc, sel4runtime, VMM,
@@ -50,8 +52,8 @@ model, in that, like virtual memory, it can be integrated with multiple ISAs and
 yet provide a consistent software-facing programming model. Morello [4, 12] is a
 prototype implementation of CHERI for Arm’s AArch64. It is an ISA extension to
 Armv8.2/AArch64. Further, the name Morello also usually refers to the SoC and a
-prototype evaluation board that supports CHERI. Finally, porting seL4 and its
-libraries to Morello will lay the groundwork for also supporting CHERI-RISC-V.
+prototype evaluation board that supports CHERI. RISC-V International is also
+going to standardise CHERI-RISC-V as a standard RISC-V extension [14].
 
 ## Guide-level explanation
 
@@ -85,7 +87,7 @@ These are the anticipated changes in the kernel in order to support running
 CHERI C applications.
 
 **build systems:** Will need to add a new CONFIG option or flag that depends on
-AArch64 (and RISC-V in the future). This will be in the kernel and userspace.
+AArch64 and RISC-V. This will be in the kernel and userspace.
 
 **bootcode:** This will enable various hardware bits in the Morello’s config
 registers for CHERI. In libsel4, all the shared structures that contain pointers
@@ -94,13 +96,13 @@ and are used by userspace will need to be annotated as capabilities.
 **Exceptions:** All the save/restore assembly code will need to be changed to
 use CHERI instructions and capability registers (prefixed with c), instead of
 AArch64’s GPRs (prefixed with x). This is specific to all registers that could
-hold either an integer or a capability. Unlike FPUs, Morello implements a
+hold either an integer or a capability. Unlike FPUs, CHERI implements a
 unified register set; i.e., it extends the existing GPRs to be able to hold
 capabilities and effectively doubles its size. There are no separate CHERI GPRs
 like with FPUs. We also expect to make the fault-handler CHERI aware to send the
 user a new CHERI violation code similar to VM faults.
 
-**vspace:** Morello introduces new permission bits in each page table entry
+**vspace:** CHERI introduces new permission bits in each page table entry
 (PTE) to save/restore capabilities. A page that doesn’t have these bits set will
 not have valid capabilities and attempts to save/restore capabilities to such
 pages will either fault or be invalidated. The AArch64’s PTE representation (in
@@ -186,8 +188,6 @@ changes. There are more implementation details and questions regarding the CHERI
 C kernel as we have different approaches to that.
 
 ## Future possibilities
-
-- Extend CHERI support to the RISC-V port.
 
 - Support CHERI’s temporal memory safety.
 
@@ -361,3 +361,5 @@ CHERI-enabled applications and C-based userspace frameworks.
 [11] Experience of running hybrid CHERI userspace on seL4 - <https://sid-agrawal.ca/sel4,/cheri,/morello,/aarch64,/cheribsd/2023/01/01/seL4-CHERI.html>
 
 [13] seL4 on Arm Morello - Martin Atkins, Mission Critical Applications Limited - <https://www.youtube.com/watch?v=YeBqmRWQWrI>
+
+[14] RISC-V Specification for CHERI Extensions - <https://github.com/riscv/riscv-cheri>
