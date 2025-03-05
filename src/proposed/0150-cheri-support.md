@@ -79,7 +79,9 @@ memory-safety warnings and errors that the CHERI-aware compiler triggers.
 The main goal of this project is to enable running CHERI C userspace. This will
 require changes to the seL4 kernel and adaptations to the userspace. The first
 approach for this RFC would be having a _**hybrid kernel and CHERI C
-userspace**_ (see more details in the Appendix).
+userspace**_ (see more details in the Appendix), while also being able to
+support running legacy code (i.e., non-CHERI, unmodified, AArch64 code on
+Morello) side-by-side.
 
 ### Hybrid seL4 kernel
 
@@ -119,6 +121,12 @@ libraries that sel4test and sel4bench depend on. This includes libsel4,
 sel4_libs, sel4_project_libs, util_libs, sel4test, sel4bench, muslc, and
 sel4runtime. No plans to support CAmkES, Microkit, device driver framework, or
 VMMs at the moment, but might do if time allows.
+
+It is also required to be able to run legacy non-CHERI code side-by-side with
+memory-safe CHERI C userspace code at the same time.
+For example, there could be a configuration in which we have formally verified
+isolation between a legacy 64-bit Arm VM and a hardened CHERI-enabled task (eg
+VMM) or VM.
 
 ## Drawbacks
 
