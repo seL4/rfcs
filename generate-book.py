@@ -28,6 +28,7 @@ import subprocess
 
 exceptions = ["README.md"]
 
+
 def main():
     with open('src/SUMMARY.md', 'w') as summary:
         summary.write('[Introduction](introduction.md)\n\n')
@@ -39,6 +40,7 @@ def main():
         collect(summary, 'src/deferred', 0)
 
     subprocess.call(['mdbook', 'build'])
+
 
 def collect(summary, path, depth):
     entries = [e for e in os.scandir(path) if e.name.endswith('.md')]
@@ -55,6 +57,7 @@ def collect(summary, path, depth):
         if os.path.isdir(maybe_subdir):
             collect(summary, maybe_subdir, depth+1)
 
+
 def get_title(path):
     with open(path, 'r') as f:
         line = f.readline()
@@ -64,6 +67,7 @@ def get_title(path):
             return None
         else:
             return line[2:]
+
 
 if __name__ == '__main__':
     main()
