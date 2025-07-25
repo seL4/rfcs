@@ -152,17 +152,11 @@ delivery of all signals with reasonable scalability overhead.
   well as adding support for interrupting multiple targets as supported by GICv2
   and GICv3).
 
-## Unresolved questions
-
-The current proposed implementation is here, but it’s awaiting a minor update to
-the revoke paths as part of some ongoing verification work:
-<https://github.com/seL4/seL4/commit/7fda970d382c034c4e9b6d49b10bfbe33d4f815f>
-
 ## Disposition
 
 The TSC approved the RFC with the following conditions:
 
-- The RFC should be updated to remove the API for broadcast and multicast for
+- [x] The RFC should be updated to remove the API for broadcast and multicast for
   now. Until we have figured out a good general model for multicast, we want to
   keep the API small so that conservative extensions are possible. The rationale
   is that for the current use case of a low number (2-16) of cores, it is cheap
@@ -171,15 +165,14 @@ The TSC approved the RFC with the following conditions:
   specific multicast model too early. This means, the `SGISignalCap` (on Arm)
   should authorise sending to a single core (and store a single SGI number).
 
-- The API for Arm should be updated to include higher affinity bits for GICv3 to
+- [x] The API for Arm should be updated to include higher affinity bits for GICv3 to
   support sending to more cores. For platforms that do not support these bits
   (e.g. GICv2), the corresponding `IRQControl` invocation should fail if those
   bits are attempted to be set.
 
 - The TSC confirmed that we want the API for invoking `SGISignalCaps` to be like
   notifications, that is, the invocation should not take any parameters beside
-  the `SGISignal` cap itself. The current (not yet updated) pull request for this
-  RFC is [seL4/seL4#1222].
+  the `SGISignal` cap itself.
 
 [seL4/seL4#1222]: https://github.com/seL4/seL4/pull/1222
 [seL4/l4v#733]: https://github.com/seL4/l4v/pull/733
