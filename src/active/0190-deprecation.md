@@ -3,7 +3,7 @@
   Copyright 2025, UNSW
 -->
 
-# seL4 RFC Template
+# Remove support for boards that are out of production
 
 - Author: Peter Chubb
 - Proposed: [2025-03-18]
