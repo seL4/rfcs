@@ -17,7 +17,7 @@ exists in the system or is not used.
 
 ## Motivation
 
-Currently the domain schedule is provided as a `.h` file and compiled into the
+Currently the domain schedule is provided as a `.c` file and compiled into the
 kernel. This was an initial stop-gap implementation and is inconvenient for SDK
 approaches such as the Microkit and overall inflexible and hard to use.
 
@@ -29,7 +29,7 @@ It is also currently not possible to run a system in multiple modes, such as
 
 The intended use for the proposed mechanism is that the initialiser sets up
 domain schedules at boot time, for instance the two schedules in the example
-above, or a single domain schedule as would now be provided as `.h` file. After
+above, or a single domain schedule as would now be provided as `.c` file. After
 that, if the system is to remain static, the `DomainCap` can be deleted as it is
 now, or it can be given to a high privilege mode control component that can
 atomically switch between schedules.
@@ -91,16 +91,18 @@ than the currently proposed changes and the same effect can already be achieved
 with a one-element schedule of long duration.
 
 Apart from the value `(0, 0)`, the kernel will prevent the creation of entries
-with duration 0. The duration is in timer ticks, and on MCS the duration at the
-API level must be >= MIN_PERIOD.
+with duration 0. The duration is in timer ticks.
 
 The kernel initialises with an array where all entries are `(0, 0)`, apart from
 the entry at index 0, which will run domain 0 for the maximum expressible time.
 
+The last entry of the domain schedule array is reserved to be an end marker.
+This allows for a simpler domain schedule end check.
+
 The kernel will preserve the following invariants:
 
-- `ksDomainStart < config_DomScheduleLength`
-- `ksDomScheduleIdx < config_DomScheduleLength`
+- `ksDomainStart < config_DomScheduleLength - 1`
+- `ksDomScheduleIdx < config_DomScheduleLength - 1`
 - `schedule[ksDomainStart].duration ~= 0`
 - for all `i` with `0 <= i config_DomScheduleLength`,
   if `schedule[i].duration = 0` then `schedule[i].domain = 0`
@@ -125,7 +127,7 @@ completes.
 | Type        | Name       | Description                                     |
 | ----------- | ---------- | ----------------------------------------------- |
 | `seL4_DomainSet` | `_service` | Domain capability to authorise the call         |
-| `seL4_Word`      | `index`    | The new start index. Must not point to `(0,0)` and must be smaller than `config_DomScheduleLength` |
+| `seL4_Word`      | `index`    | The new start index. Must not point to `(0,0)` and must be smaller than `config_DomScheduleLength-1` |
 
 The function returns `seL4_NoError` for success as usual. The following error
 codes are returned otherwise:
@@ -134,7 +136,7 @@ codes are returned otherwise:
 | ---------------------- | ----------------------------------------------- |
 | `seL4_InvalidCapability` | the provided capability is not the domain capability |
 | `seL4_InvalidArgument`   | the entry at the provided index is an end marker     |
-| `seL4_RangeError`        | the index is not less than `config_DomScheduleLength` |
+| `seL4_RangeError`        | the index is not less than `config_DomScheduleLength-1` |
 
 
 #### Set_Domain_Entry
@@ -160,9 +162,9 @@ ready to switch.
 | Type        | Name       | Description                                     |
 | ----------- | ---------- | ----------------------------------------------- |
 | `seL4_DomainSet` | `_service` | Domain capability to authorise the call         |
-| `seL4_Word`      | `index`    | The index of the entry to set. Must be smaller than `config_DomScheduleLength`. |
+| `seL4_Word`      | `index`    | The index of the entry to set. Must be smaller than `config_DomScheduleLength-1`. |
 | `seL4_Uint8`     | `domain`   | The domain of the schedule entry. Must be smaller than `CONFIG_NUM_DOMAINS`. Must be 0 if the duration is 0. |
-| `seL4_Word`      | `duration` | The duration for the entry. On MCS, must be 0 or `>= MIN_BUDGET`. |
+| `seL4_Word`      | `duration` | The duration for the entry in ticks. |
 
 The function returns `seL4_NoError` for success as usual. The following error
 codes are returned otherwise:
@@ -171,14 +173,14 @@ codes are returned otherwise:
 | ---------------------- | ----------------------------------------------- |
 | `seL4_InvalidCapability` | the provided capability is not the domain capability |
 | `seL4_InvalidArgument`   | the index is the current domain start index and the duration is 0, or the duration is 0, but the domain is not 0. |
-| `seL4_RangeError`        | the index is not less than `config_DomScheduleLength`, or the domain is not less than `CONFIG_NUM_DOMAINS`, or on MCS the duration is less than `MIN_BUDGET` |
+| `seL4_RangeError`        | the index is not less than `config_DomScheduleLength-1`, or the domain is not less than `CONFIG_NUM_DOMAINS` |
 
 ### Configuration Options
 
 The new config option `config_DomScheduleLength` determines the static size of
 the overall domain schedule array and thereby the longest domain schedule that
 is possible to configure at runtime. The default value for
-`config_DomScheduleLength` is 256.
+`config_DomScheduleLength` is 100.
 
 ### Initialisation
 
@@ -199,16 +201,11 @@ schedule as follows:
 4. Set the schedule start to the desired start value, e.g. index 0
 5. Suspend/stop the initialiser
 
-With this the first run of domain 0 after the initialiser will not get its full
-time slice, because step 5 will already run in the user-provided schedule, but
-after that, the user-provided schedule will be in force.
-
-This works if the initialiser can finish its work within the duration of entry
-0. Since the duration is set to the maximum expressible time, this should in
-practice never be an issue. Even if the time is not sufficient, the procedure
-will still work unless the domain time of the initialiser happens to expire
-during the execution of step 3. If that is a possibility, the initialiser could
-include a suitable delay before step 3 to make this impossible.
+The initialiser will be able to run for up to the maximum duration expressible
+in ticks (hundreds of days even on extremely high timer frequencies), and the
+user-provided schedule will start after the initialiser is done. If the first
+time slice of the new schedule is running domain 0, the initialiser will consume
+the time necessary to perform the suspend/stop step, but no more.
 
 The reason the scheme works is that the kernel will not act on new values in the
 schedule before the current domain slice has expired whereas setting the start
@@ -228,11 +225,11 @@ an implicit end marker is assumed.
 
 The main drawback is that this is a breaking change for users. Setting and
 initialising a domain schedule now works differently, and build scripts may
-need to be updated to no longer generate/add the former `.h` file that contained
+need to be updated to no longer generate/add the former `.c` file that contained
 the schedule.
 
-In theory a tool could be provided that converts current `.h` file schedules
-into the capDL sections, but since `.h` files can contain anything we are not
+In theory a tool could be provided that converts current `.c` file schedules
+into the capDL sections, but since `.c` files can contain anything we are not
 proposing such a tool as part of this RFC.
 
 Tests for the domain scheduler in sel4test will need to be changed to create the
@@ -339,3 +336,9 @@ The API is expressed in terms of timer ticks in expectation of an additional
 upcoming RFC to change the rest of the API to timer ticks as well. Depending on
 the outcome of that discussion, the API could also be in terms of `time_t`
 instead if required for consistency.
+
+
+## Disposition
+
+The TSC approved the RFC and decided to use timer ticks. The RFC text has
+been updated with minor changes discovered during the implementation.
