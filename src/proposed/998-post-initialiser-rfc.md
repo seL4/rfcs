@@ -93,10 +93,16 @@ Therefore, at the start point of PDs running, the memory, I/O Ports, and IRQs
 of PCIe device drivers have been ready.
 
 This feature is useful when ther are some components running at only the init 
-phase and some other PDs waiting for them to start. Even if a component has no 
-requirements on shared CNodes, moving it into the `post-initialisation` block 
-also helps remove the startup signaling the waitings, as they are good to
-go once get scheduled.
+phase and some other PDs waiting for them to start. For a componet requiring
+shared CNoes, it is a must to be put insde the post-initialisation block. For
+a component that does not need shared CNodes, the system designer should take
+initialisation time increase into consideration, as all the other PDs have to
+wait until all the `post-initialisers` finish.
+
+For multi-core cases, the parameter `phase` might not be the best solution to
+control the execution flow. Adding things into `post-initialisation` block
+can hide the the signals for synchronisation but forces all the PDs to wait.
+This is left as an unresolved question for discussion.
 
 ## Reference-level explanation
 
@@ -141,10 +147,19 @@ Instead of passing capabilities via the shared CNode, one thread can pass at
 most 3 capabilities in an IPC, but need a more complicated mechanism if there 
 are more than 3 capabilities to pass.
 
+### Alternative 3: Make the capDL initialiser to do all of this
+
+Integrating the APCI/PCIe-related work into the capDL initialiser, including 
+the ACPI AML interpreter and PCIe resource configurations, so PCIe devices 
+would be ready after the Microkit starts scheduling PDs.
+
+This might not be the best solution but worth discussing on it.
+
 ## Unresolved questions
 
 1. Microkit SDF syntax of post-initialiser component?
 2. Capabilities passing mechanism between `post-initialiser`?
 3. Should post-initialiser run in a strict order?
 4. Does this design actually not break the Microkit verification story?
+5. How post-initialisers should be scheduled on multi-core systems?
 
