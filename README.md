@@ -61,6 +61,8 @@ Examples of changes that must follow the RFC process include:
 - Adding or removing a capability or object type
 - Adding or removing a library or framework to/from the set of repositories the
   foundation maintains
+- Changing the user-facing API or model of libraries or frameworks such as
+  CAmkES or the Microkit in a way that would impact users.
 
 If you try to make a substantial change via a pull request alone, your request
 is likely to be rejected and you will be asked to use the RFC process to propose
@@ -83,8 +85,19 @@ Examples of changes that should not involve the RFC process include:
 - Adding a driver to an existing layer of the system
 - Refactoring code without affecting functionality or verification
 
+Libraries that are for prototyping only or are used internally for e.g. sel4test
+and sel4bench, or changes in testing environments such as sel4test and sel4bench
+themselves do not need an RFC. Implementation changes or bug fixes
+in general that do not have impact for users other than improving broken
+scenarios do not need an RFC.
+
 If you are unsure whether a change requires an RFC, ask on the [seL4 Mattermost]
 chat or post a question to the [development mailing list] or [discourse forum].
+
+In cases where an API change is small or trivial and otherwise clearly
+beneficial, it is fine to make a pull request without an RFC and request a
+review from `sel4/TSC`. If at least one TSC member approves and no objections
+have been raised within 2 weeks, the PR can go ahead.
 
 
 ## The RFC Process
