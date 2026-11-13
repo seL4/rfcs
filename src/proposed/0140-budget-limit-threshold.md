@@ -13,13 +13,14 @@
 This is an RFC that proposes to add a new `budget threshold' to
 endpoints, which would only allow scheduling context donation to occur if the
 SC's available budget exceeds the threshold. This would provide a mechanism to
-prevent budget-expiry from occurring in passive servers.
+prevent budget expiry from occurring in passive servers, and make it possible
+to reserve timeout faults for true error conditions, e.g. misconfigurations.
 
 ## Motivation
 
 This change regarding thresholds is motivated by a desire to prevent budget
 expiry from occurring inside passive servers, improving worst-case performance
-and response time analysis. Additionally, it would shift timeout exceptions into
+and response-time analysis. Additionally, it would shift timeout exceptions into
 being a true error case, rather than an unavoidable, but routine occurrence on
 many systems. This is likely to simplify system design.
 
@@ -32,11 +33,19 @@ particularly important for servers with clients of varying criticality.
 The kernel currently supports a mechanism to manage budget expiry, timeout
 handlers. These allow an error-handling thread to intervene and resolve the
 budget expiry. However, as they address the issue after it occurs, these have
-some limitations. Timeout handlers can provide extra budget, however, it is not
+some limitations. Timeout handlers can provide extra budget; however, it is not
 preferable to reward clients with additional budget just because they are
-blocking the rest of the system. Alternatively, the server can be reverted to a
-previous state, however this wastes any work the server performed and can be
-expensive or impractical, depending on the nature of the passive server.
+blocking the rest of the system. In addition, providing extra budget will affect
+response-time analysis and result in an unnecessarily pessimistic worst-case
+response time.
+
+Timeout handlers are also designed to capture other error conditions like
+misconfigurations. With budget expiry occurring in passive servers, it is harder
+to utilise timeout handlers to capture them.
+
+Alternatively, the server can be reverted to a previous state; however, this
+wastes any work the server performed and can be expensive or impractical,
+depending on the nature of the passive server.
 
 This RFC proposes a new mechanism, endpoint thresholds, which aim to prevent
 budget expiry from occurring in passive servers, rather than reacting to it
